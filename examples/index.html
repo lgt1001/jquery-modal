@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.js"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.2/jquery.modal.min.css" />
+  <script src="../jquery.modal.js"></script>
+  <link rel="stylesheet" href="../jquery.modal.min.css" />
 
   <script src="highlight/highlight.pack.js" type="text/javascript" charset="utf-8"></script>
   <script type="text/javascript" charset="utf-8"> hljs.initHighlightingOnLoad(); </script>
@@ -465,6 +465,59 @@ $('#sub-modal').modal({
   }
 </style>
 
+<hr>
+
+<h2 id="example-9"><a href="#example-9">#</a> Example 9: Reuse same modal but render different content</h2>
+<p>
+  This example demonstrates how to reuse same modal and render different content, 
+  such as we have a login modal and a register modal, 
+  we can directly open them directly from outside, 
+  and we also can open register modal from login modal:
+</p>
+
+<pre><code>function login(){
+  $("#modal")
+    .empty()
+    .append("&lt;div&gt;&lt;h2&gt;Login&lt;/h2&gt;"+
+      "&lt;form id='loginForm'&gt;"+
+      "&lt;div&gt;&lt;label for='username'>Username:&lt;/label&gt;"+
+      " &lt;input type='text' id='username' name='username' /&gt;&lt;/div&gt;"+
+      "&lt;div&gt;&lt;label for='password'>Password:&lt;/label&gt;"+
+      " &lt;input type='password' id='password' name='password' /&gt;&lt;/div&gt;"+
+      "&lt;div&gt;&lt;input type='submit' value='Login' /&gt;&nbsp;&nbsp;"+
+      " &lt;a id='registerBtn'>Register&lt;/a&gt;&lt;/div&gt;"+
+      "&lt;/form&gt;&lt;/div&gt;")
+    .width("500px").height("200px")
+    .modal({ fadeDuration: 500, fadeDelay: 0.50, 
+      escapeClose: false, clickClose: false, closeExisting: false });
+  $("#registerBtn").on("click", function(e) {
+      e.preventDefault();
+      $.modal.release();
+      register();
+  });
+}
+function register() {
+  $("#modal")
+  .empty()
+  .append("&lt;div&gt;&lt;h2&gt;Register&lt;/h2&gt;"+
+    "&lt;form id='registerForm'&gt;"+
+    "&lt;div&gt;&lt;label for='username'>Username:&lt;/label&gt;"+
+    " &lt;input type='text' id='username' name='username' /&gt;&lt;/div&gt;"+
+    "&lt;div&gt;&lt;label for='password'>Password:&lt;/label&gt;"+
+    " &lt;input type='password' id='password' name='password' /&gt;&lt;/div&gt;"+
+    "&lt;div&gt;&lt;label for='rptPassword'>Repeat Password:&lt;/label&gt;"+
+    " &lt;input type='password' id='rptPassword' name='rptPassword' /&gt;&lt;/div&gt;"+
+    "&lt;div&gt;&lt;input type='submit' value='Register' /&gt;&lt;/div&gt;"+
+    "&lt;/form&gt;&lt;/div&gt;")
+  .width("500px").height("250px")
+  .modal({ fadeDuration: 500, fadeDelay: 0.50, 
+    escapeClose: false, clickClose: false, closeExisting: false });
+}</code></pre>
+<a class="btn" id="modalBtn">Open Modal</a>
+
+<div id="modal" class="modal">
+</div>
+
 <script type="text/javascript" charset="utf-8">
   $(function() {
 
@@ -482,7 +535,7 @@ $('#sub-modal').modal({
     $(document).on($.modal.AJAX_SEND, log_modal_event);
     $(document).on($.modal.AJAX_SUCCESS, log_modal_event);
     $(document).on($.modal.AJAX_COMPLETE, log_modal_event);
-
+    
     $('#more').click(function() {
       $(this).parent().after($(this).parent().next().clone());
       return false;
@@ -542,8 +595,42 @@ $('#sub-modal').modal({
         closeText: '!'
       });
     });
-
+});
+function login(){
+  $("#modal")
+    .empty()
+    .append('<div><h2>Login</h2>'+
+      '<form id="loginForm">'+
+      '<div><label for="username">Username:</label><input type="text" id="username" name="username" /></div>'+
+      '<div><label for="password">Password:</label><input type="password" id="password" name="password" /></div>'+
+      '<div><input type="submit" value="Login" />&nbsp;&nbsp;<a id="registerBtn">Register</a></div>'+
+      '</form></div>')
+    .width("500px").height("200px")
+    .modal({ fadeDuration: 500, fadeDelay: 0.50, escapeClose: false, clickClose: false, closeExisting: false });
+  $("#registerBtn").on("click", function(e) {
+      e.preventDefault();
+      $.modal.release();
+      register();
   });
+}
+function register() {
+  $("#modal")
+  .empty()
+  .append('<div><h2>Register</h2>'+
+    '<form id="registerForm">'+
+    '<div><label for="username">Username:</label><input type="text" id="username" name="username" /></div>'+
+    '<div><label for="password">Password:</label><input type="password" id="password" name="password" /></div>'+
+    '<div><label for="rptPassword">Repeat Password:</label><input type="password" id="rptPassword" name="rptPassword" /></div>'+
+    '<div><input type="submit" value="Register" /></div>'+
+    '</form></div>')
+  .width("500px").height("250px")
+  .modal({ fadeDuration: 500, fadeDelay: 0.50, escapeClose: false, clickClose: false, closeExisting: false });
+}
+
+$('#modalBtn').on("click", function(event) {
+  event.preventDefault();
+  login();
+});
 </script>
 
 <script>

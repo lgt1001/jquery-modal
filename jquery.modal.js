@@ -111,10 +111,11 @@
       if (!$.modal.isActive())
         $(document).off('keydown.modal');
     },
-      release: function() {
-        modals.pop();
-        this.unblock();
-      },
+    
+    release: function() {
+      modals.pop();
+      this.unblock();
+    },
 
     block: function() {
       this.$elm.trigger($.modal.BEFORE_BLOCK, [this._ctx()]);
@@ -197,13 +198,13 @@
     return current.$elm;
   };
 
-    $.modal.release = function(event) {
-      if (!$.modal.isActive()) return;
-      if (event) event.preventDefault();
-      var current = getCurrent();
-      current.release();
-      return current.$elm;
-    }
+  $.modal.release = function(event) {
+    if (!$.modal.isActive()) return;
+    if (event) event.preventDefault();
+    var current = getCurrent();
+    current.release();
+    return current.$elm;
+  };
 
   // Returns if there currently is an active modal
   $.modal.isActive = function () {
